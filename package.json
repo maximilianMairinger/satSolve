@@ -1,9 +1,24 @@
 {
   "name": "sat-solver",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "index.js",
-  "keywords": ["sat", "solver", "allsat", "all", "solutions", "find", "boolean", "syntax agnostic", "multi syntax", "multiple syntax", "sat parser", "parse", "ast", "sat ast"],
+  "keywords": [
+    "sat",
+    "solver",
+    "allsat",
+    "all",
+    "solutions",
+    "find",
+    "boolean",
+    "syntax agnostic",
+    "multi syntax",
+    "multiple syntax",
+    "sat parser",
+    "parse",
+    "ast",
+    "sat ast"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
