@@ -89,7 +89,7 @@ function createForumla(astTree) {
 }
 
 function memoizeVar(fn) {
-  let cache: undefined
+  let cache
   return function() {
     if (cache === undefined) cache = fn()
     return cache
