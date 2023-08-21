@@ -114,7 +114,7 @@ function parseSATStringToAST (satString) {
     }
     else if (curCar === "(" || curCar === "[" || curCar === "{") {
       tree.push(parseSATStringToAST(satString.slice(1)))
-      satString = satString.substring(satString.indexOf(closingBracketIndex[curCar]), satString.length)
+      satString = satString.substring(findMatchingCloseBracket(satString), satString.length)
     }
     else if (curCar === ")" || curCar === "]" || curCar === "}") {
       if (curVar !== "") tree.push(curVar)
@@ -141,6 +141,32 @@ function parseSATStringToAST (satString) {
 
   return tree
 }
+
+
+function findMatchingCloseBracket(str) {
+  let cumCloseIndex = 0
+  let openCount = 0
+  while(true) {
+    let nextOpenBracket = str.indexOf("(")
+    let nextCloseBracket = str.indexOf(")")
+
+    if (nextOpenBracket === -1) nextOpenBracket = Infinity
+    if (nextCloseBracket === -1) nextCloseBracket = Infinity
+
+    if (nextOpenBracket > nextCloseBracket) {
+      openCount--
+      cumCloseIndex += nextCloseBracket + 1
+      str = str.substring(nextCloseBracket + 1, str.length)
+      if (openCount === 0) return cumCloseIndex - 1
+    }
+    else {
+      openCount++
+      cumCloseIndex += nextOpenBracket + 1
+      str = str.substring(nextOpenBracket + 1, str.length)
+    }
+  }
+}
+
 
 exports.parseSATStringToAST = parseSATStringToAST
 exports.parseAstTreeToLang = parseAstTreeToLang
