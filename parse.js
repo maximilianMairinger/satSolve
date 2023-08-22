@@ -1,6 +1,3 @@
-const Logic = require("logic-solver")
-var solver = new Logic.Solver();
-
 const operators = {
   and: Symbol("and"),
   or: Symbol("or"),
