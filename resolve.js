@@ -1,5 +1,5 @@
 const { solve } = require("./index")
-const { parseAstTreeToLang, lang, operators } = require("./parse")
+const { parseAstTreeToLang, langIndex, operators } = require("./parse")
 
 let query = `(a or !b) and (w or e or k) and (c or b)`
 
@@ -69,7 +69,7 @@ let currentAst = ast
 
 
 
-const str = parseAstTreeToLang(ast, lang.limbool, true)
+const str = parseAstTreeToLang(ast, langIndex.limbool, true)
 print(str)
 let clauseIndex = 0
 for (const el of currentAst) {

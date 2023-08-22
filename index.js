@@ -1,9 +1,12 @@
-const { parseAstTreeToLang, parseSATStringToAST, operators } = require("./parse")
+const { parseAstTreeToLang, parseSATStringToAST, operators, langIndex } = require("./parse")
 const Logic = require("logic-solver")
 
 // const sol = new Logic.Solver()
 
 exports.operators = operators
+exports.parseSATStringToAST = parseSATStringToAST
+exports.parseAstTreeToLang = parseAstTreeToLang
+exports.langIndex = langIndex
 
 const operatorToLogicSolverKeyword = {
   [operators.and]: "and",
@@ -96,33 +99,41 @@ function memoizeVar(fn) {
   }
 }
 
-function solve(astString) {
+function solve(astString_solver) {
+  let getSolver = undefined
+  let errorAst = undefined 
   let error = undefined
-  let errorAst = undefined
-  let astTree
-  try {
-    astTree = parseSATStringToAST(astString)
-  }
-  catch (e) {
-    errorAst = error = new Error("Error parsing the input to a astTree. This really shouldnt happen even with wrong syntax :/")
-  }
-  
-
-  
-
-  const getSolver = memoizeVar(() => {
-    let solver = new Logic.Solver();
-    let errorSolver = undefined
-    if (error === undefined) {
-      try {
-        solver.require(createForumla(astTree))
-      }
-      catch(e) {
-        error = errorSolver = new Error("Error parsing the astTree to a solver. This may happen because you provided a term with wrong syntax. Please check your input. You may view the successfully produced astTree (with getAstTree()) to debug the problem.")
-      }
+  let astTree = undefined
+  if (typeof astString_solver === "string") {
+    const astString = astString_solver
+    try {
+      astTree = parseSATStringToAST(astString)
     }
-    return solver
-  })
+    catch (e) {
+      errorAst = error = new Error("Error parsing the input to a astTree. This really shouldnt happen even with wrong syntax :/")
+    }
+    
+  
+    
+  
+    getSolver = memoizeVar(() => {
+      let solver = new Logic.Solver();
+      let errorSolver = undefined
+      if (error === undefined) {
+        try {
+          solver.require(createForumla(astTree))
+        }
+        catch(e) {
+          error = errorSolver = new Error("Error parsing the astTree to a solver. This may happen because you provided a term with wrong syntax. Please check your input. You may view the successfully produced astTree (with getAstTree()) to debug the problem.")
+        }
+      }
+      return solver
+    })
+  }
+  else {
+    getSolver = () => astString_solver
+  }
+  
 
   return {
     findOne() {

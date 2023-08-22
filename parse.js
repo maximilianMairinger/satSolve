@@ -40,7 +40,7 @@ operators["⊕"] = operators.xor
 operators["⊻"] = operators.xor
 
 
-const lang = {
+const langIndex = {
   limbool: {
     [operators.and]: "&",
     [operators.or]: "|",
@@ -54,7 +54,7 @@ const lang = {
   }
 }
 
-exports.lang = lang
+exports.langIndex = langIndex
 
 
 const closingBracketIndex = {
@@ -64,7 +64,7 @@ const closingBracketIndex = {
 }
 
 
-function parseAstTreeToLang(astTree, lang, pretty = true) {
+function parseAstTreeToLang(astTree, lang = langIndex.limbool, pretty = true) {
   let str = ""
 
   for (let i = 0; i < astTree.length; i++) {
