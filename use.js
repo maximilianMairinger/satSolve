@@ -1,12 +1,38 @@
 const { solve } = require("./index")
 
+
+
+// console.log(hoistCommonAttributesIntoGroup(`
+// <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 35 36">
+//   <path a d/>
+//   <path a b c/>
+//   <path b c d/>
+// </svg>
+// `))
+
+const startingPos1 = ["(x ∧ ¬y ∧ ¬z)", "(x ∧ ¬y ∧ z)"]
+
+const startingPos2 = [
+  "!z & !zNxt & !xNxt & !yNxt & x & !y",
+  "!z & zNxt & !xNxt & !yNxt & x & !y",
+  "!z & !zNxt & xNxt & !yNxt & x & !y",
+  "!z & !zNxt & xNxt & yNxt & x & !y",
+  "!z & zNxt & !xNxt & yNxt & x & !y",
+  "!z & !zNxt & !xNxt & yNxt & x & !y",
+  "!z & zNxt & xNxt & !yNxt & x & !y",
+  "z & zNxt & !xNxt & yNxt & x & !y"
+]
+
+
+
 const query = `
-((a or d) and !c and !b) and ((a or b or c) and !d) or
-((a or b or c) and !d) and ((b or c or d) and !a)
-`
+(xNxt ↔ (¬z)∧yNxt ↔ (x∨y)∧zNxt ↔ z)
+and (
+${startingPos2.join(" or ")}
+)`
 
 const out = solve(query).findAll()
-
+console.log(out)
 
 
 for (const line of out) {

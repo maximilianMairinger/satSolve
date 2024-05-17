@@ -13,7 +13,9 @@ const operatorToLogicSolverKeyword = {
   [operators.or]: "or",
   [operators.not]: "not",
   [operators.implies]: "implies",
-  [operators.xor]: "xor"
+  [operators.impliesReverse]: "implies",
+  [operators.xor]: "xor",
+  [operators.iff]: "equiv"
 }
 
 function formulateClause(token) {
@@ -71,7 +73,8 @@ function createForumla(astTree) {
       }
       else if (operatorToLogicSolverKeyword[token] !== undefined) {
         i++
-        forumla = Logic[operatorToLogicSolverKeyword[token]](forumla, nextClause)
+        if (token === operators.impliesReverse) forumla = Logic[operatorToLogicSolverKeyword[token]](nextClause, forumla)
+        else forumla = Logic[operatorToLogicSolverKeyword[token]](forumla, nextClause)
       }
       else throw new Error("Invalid operator")
     }

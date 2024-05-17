@@ -3,7 +3,8 @@ const operators = {
   or: Symbol("or"),
   not: Symbol("not"),
   implies: Symbol("implies"),
-  // iff: Symbol("iff"),
+  impliesReverse: Symbol("impliesReverse"),
+  iff: Symbol("iff"),
   xor: Symbol("xor")
 };
 
@@ -31,10 +32,35 @@ operators["=>"] = operators.implies
 operators["->"] = operators.implies
 operators["==>"] = operators.implies
 operators["-->"] = operators.implies
+operators["THEN"] = operators.implies
+
+
+operators["ISIMPLIED"] = operators.impliesReverse
+operators["ISIMPLIEDBY"] = operators.impliesReverse
+operators["IS_IMPLIED_BY"] = operators.impliesReverse
+operators["IS_IMPLIED"] = operators.impliesReverse
+operators["IF"] = operators.impliesReverse
+operators["<="] = operators.implies
+operators["<-"] = operators.implies
+operators["<=="] = operators.implies
+operators["<--"] = operators.implies
+operators["←"] = operators.implies
+operators["⇐"] = operators.implies
+
 
 operators["XOR"] = operators.xor
 operators["⊕"] = operators.xor
 operators["⊻"] = operators.xor
+
+operators["IFF"] = operators.iff
+operators["<=>"] = operators.iff
+operators["<->"] = operators.iff
+operators["⇔"] = operators.iff
+operators["↔"] = operators.iff
+operators["<==>"] = operators.iff
+operators["<-->"] = operators.iff
+
+
 
 
 const langIndex = {
