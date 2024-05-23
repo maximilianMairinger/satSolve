@@ -3,56 +3,53 @@ const operators = {
   or: Symbol("or"),
   not: Symbol("not"),
   implies: Symbol("implies"),
-  impliesReverse: Symbol("impliesReverse"),
+  implies_reverse: Symbol("impliesReverse"),
   iff: Symbol("iff"),
   xor: Symbol("xor")
 };
 
 exports.operators = operators
 
-operators["AND"] = operators.and
 operators["&"] = operators.and
 operators["∧"] = operators.and
 operators["^"] = operators.and
 
-operators["OR"] = operators.or
 operators["|"] = operators.or
 operators["∨"] = operators.or
 
 
-operators["NOT"] = operators.not
 operators["¬"] = operators.not
 operators["!"] = operators.not
 operators["-"] = operators.not
 
-operators["IMPLIES"] = operators.implies
 operators["⇒"] = operators.implies
 operators["→"] = operators.implies
 operators["=>"] = operators.implies
 operators["->"] = operators.implies
 operators["==>"] = operators.implies
 operators["-->"] = operators.implies
-operators["THEN"] = operators.implies
+operators["then"] = operators.implies
 
 
-operators["ISIMPLIED"] = operators.impliesReverse
-operators["ISIMPLIEDBY"] = operators.impliesReverse
-operators["IS_IMPLIED_BY"] = operators.impliesReverse
-operators["IS_IMPLIED"] = operators.impliesReverse
-operators["IF"] = operators.impliesReverse
-operators["<="] = operators.implies
-operators["<-"] = operators.implies
-operators["<=="] = operators.implies
-operators["<--"] = operators.implies
-operators["←"] = operators.implies
-operators["⇐"] = operators.implies
+
+operators["reverseimplies"] = operators.implies_reverse
+operators["reverse_implies"] = operators.implies_reverse
+operators["impliesreverse"] = operators.implies_reverse
+operators["isimpliedby"] = operators.implies_reverse
+operators["is_implied_by"] = operators.implies_reverse
+operators["is_implied"] = operators.implies_reverse
+operators["if"] = operators.implies_reverse
+operators["<="] = operators.implies_reverse
+operators["<-"] = operators.implies_reverse
+operators["<=="] = operators.implies_reverse
+operators["<--"] = operators.implies_reverse
+operators["←"] = operators.implies_reverse
+operators["⇐"] = operators.implies_reverse
 
 
-operators["XOR"] = operators.xor
 operators["⊕"] = operators.xor
 operators["⊻"] = operators.xor
 
-operators["IFF"] = operators.iff
 operators["<=>"] = operators.iff
 operators["<->"] = operators.iff
 operators["⇔"] = operators.iff
@@ -61,6 +58,13 @@ operators["<==>"] = operators.iff
 operators["<-->"] = operators.iff
 
 
+function operatorsHas(key) {
+  return key.toLowerCase() in operators
+}
+
+function operatorsGet(key) {
+  return operators[key.toLowerCase()]
+}
 
 
 const langIndex = {
@@ -125,8 +129,8 @@ function parseSATStringToAST (satString) {
     
     if (curCar === " " || curCar === "\t" || curCar === "\n" || curCar === "\r") {
       if (curVar !== "") {
-        if (operators[curVar] !== undefined) {
-          tree.push(operators[curVar])
+        if (operatorsHas(curCar)) {
+          tree.push(operatorsGet(curCar))
         }
         else {
           tree.push(curVar)
@@ -155,12 +159,12 @@ function parseSATStringToAST (satString) {
       if (curVar !== "") tree.push(curVar)
       return tree
     }
-    else if (operators[curCar] !== undefined) {
+    else if (operatorsHas(curCar)) {
       if (curVar !== "") {
         tree.push(curVar)
         curVar = ""
       }
-      tree.push(operators[curCar])
+      tree.push(operatorsGet(curCar))
       if ((curCar === "&" && satString[1] === "&") || (curCar === "|" && satString[1] === "|")) {
         satString = satString.substring(1, satString.length)
       }
