@@ -118,7 +118,6 @@ function parseSATStringToAST (satString) {
 
   const tree = []
   
-
   let curVar = ""
 
   while(satString.length > 0) {
@@ -135,6 +134,19 @@ function parseSATStringToAST (satString) {
         curVar = ""
       }
     }
+    else if (curCar === "/" && satString[1] === "/") {
+      satString = satString.slice(2)
+      while(satString.length > 0 && satString[0] !== "\n") {
+        satString = satString.slice(1)
+      }
+    }
+    else if (curCar === "/" && satString[1] === "*") {
+      satString = satString.slice(2)
+      while(satString.length > 0 && !(satString[0] === "*" && satString[1] === "/")) {
+        satString = satString.slice(1)
+      }
+      satString = satString.slice(2)
+    }
     else if (curCar === "(" || curCar === "[" || curCar === "{") {
       tree.push(parseSATStringToAST(satString.slice(1)))
       satString = satString.substring(findMatchingCloseBracket(satString), satString.length)
@@ -150,14 +162,14 @@ function parseSATStringToAST (satString) {
       }
       tree.push(operators[curCar])
       if ((curCar === "&" && satString[1] === "&") || (curCar === "|" && satString[1] === "|")) {
-        satString = satString.substring(1, satString.length);
+        satString = satString.substring(1, satString.length)
       }
     }
     else {
       curVar += curCar
     }
 
-    satString = satString.substring(1, satString.length);
+    satString = satString.substring(1, satString.length)
   }
 
   if (curVar !== "") tree.push(curVar)
