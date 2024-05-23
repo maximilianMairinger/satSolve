@@ -8,26 +8,31 @@ const operators = {
   xor: Symbol("xor")
 };
 
+// those that dont need space around them
+const operatorsSelfContaining = {}
+
 exports.operators = operators
 
-operators["&"] = operators.and
-operators["∧"] = operators.and
-operators["^"] = operators.and
+operatorsSelfContaining["&"] = operators.and
+operatorsSelfContaining["&&"] = operators.and
+operatorsSelfContaining["∧"] = operators.and
+operatorsSelfContaining["^"] = operators.and
 
-operators["|"] = operators.or
-operators["∨"] = operators.or
+operatorsSelfContaining["|"] = operators.or
+operatorsSelfContaining["||"] = operators.or
+operatorsSelfContaining["∨"] = operators.or
 
 
-operators["¬"] = operators.not
-operators["!"] = operators.not
-operators["-"] = operators.not
+operatorsSelfContaining["¬"] = operators.not
+operatorsSelfContaining["!"] = operators.not
+operatorsSelfContaining["-"] = operators.not
 
-operators["⇒"] = operators.implies
-operators["→"] = operators.implies
-operators["=>"] = operators.implies
-operators["->"] = operators.implies
-operators["==>"] = operators.implies
-operators["-->"] = operators.implies
+operatorsSelfContaining["⇒"] = operators.implies
+operatorsSelfContaining["→"] = operators.implies
+operatorsSelfContaining["=>"] = operators.implies
+operatorsSelfContaining["->"] = operators.implies
+operatorsSelfContaining["==>"] = operators.implies
+operatorsSelfContaining["-->"] = operators.implies
 operators["then"] = operators.implies
 
 
@@ -39,31 +44,37 @@ operators["isimpliedby"] = operators.implies_reverse
 operators["is_implied_by"] = operators.implies_reverse
 operators["is_implied"] = operators.implies_reverse
 operators["if"] = operators.implies_reverse
-operators["<="] = operators.implies_reverse
-operators["<-"] = operators.implies_reverse
-operators["<=="] = operators.implies_reverse
-operators["<--"] = operators.implies_reverse
-operators["←"] = operators.implies_reverse
-operators["⇐"] = operators.implies_reverse
+operatorsSelfContaining["<="] = operators.implies_reverse
+operatorsSelfContaining["<-"] = operators.implies_reverse
+operatorsSelfContaining["<=="] = operators.implies_reverse
+operatorsSelfContaining["<--"] = operators.implies_reverse
+operatorsSelfContaining["←"] = operators.implies_reverse
+operatorsSelfContaining["⇐"] = operators.implies_reverse
 
 
-operators["⊕"] = operators.xor
-operators["⊻"] = operators.xor
+operatorsSelfContaining["⊕"] = operators.xor
+operatorsSelfContaining["⊻"] = operators.xor
 
-operators["<=>"] = operators.iff
-operators["<->"] = operators.iff
-operators["⇔"] = operators.iff
-operators["↔"] = operators.iff
-operators["<==>"] = operators.iff
-operators["<-->"] = operators.iff
+operatorsSelfContaining["<=>"] = operators.iff
+operatorsSelfContaining["<->"] = operators.iff
+operatorsSelfContaining["⇔"] = operators.iff
+operatorsSelfContaining["↔"] = operators.iff
+operatorsSelfContaining["<==>"] = operators.iff
+operatorsSelfContaining["<-->"] = operators.iff
 
-
-function operatorsHas(key) {
-  return key.toLowerCase() in operators
-}
-
-function operatorsGet(key) {
-  return operators[key.toLowerCase()]
+const ops = {
+  hasContained(key) {
+    return key.toLowerCase() in operators
+  },
+  hasUnContained(key) {
+    return key in operatorsSelfContaining
+  },
+  getContained(key) {
+    return operators[key.toLowerCase()]
+  },
+  getUnContained(key) {
+    return operatorsSelfContaining[key]
+  }
 }
 
 
@@ -129,8 +140,8 @@ function parseSATStringToAST (satString) {
     
     if (curCar === " " || curCar === "\t" || curCar === "\n" || curCar === "\r") {
       if (curVar !== "") {
-        if (operatorsHas(curCar)) {
-          tree.push(operatorsGet(curCar))
+        if (ops.hasContained(curVar)) {
+          tree.push(ops.getContained(curVar))
         }
         else {
           tree.push(curVar)
@@ -159,19 +170,33 @@ function parseSATStringToAST (satString) {
       if (curVar !== "") tree.push(curVar)
       return tree
     }
-    else if (operatorsHas(curCar)) {
-      if (curVar !== "") {
-        tree.push(curVar)
-        curVar = ""
-      }
-      tree.push(operatorsGet(curCar))
-      if ((curCar === "&" && satString[1] === "&") || (curCar === "|" && satString[1] === "|")) {
-        satString = satString.substring(1, satString.length)
-      }
-    }
     else {
       curVar += curCar
     }
+
+
+    let curToken = curVar
+    let tmpVar = ""
+    while(curToken.length > 0) {
+      if (ops.hasUnContained(curToken)) {
+        if (tmpVar !== "") tree.push(tmpVar)
+        
+        // greedy
+        while(satString.length > 0 && ops.hasUnContained(curToken)) {
+          satString = satString.substring(1, satString.length)
+          curToken += satString[0]
+        }
+        tree.push(ops.getUnContained(curToken.slice(0, curToken.length - 1)))
+        satString = "x" + satString // this x will be removed at the end of this while loop
+        curVar = ""
+        break
+      }
+      else {
+        tmpVar += curToken[0]
+      }
+      curToken = curToken.substring(1, curToken.length)
+    }
+    
 
     satString = satString.substring(1, satString.length)
   }
