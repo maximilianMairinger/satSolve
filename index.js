@@ -128,6 +128,7 @@ function solve(astString_solver) {
         }
         catch(e) {
           error = errorSolver = new Error("Error parsing the astTree to a solver. This may happen because you provided a term with wrong syntax. Please check your input. You may view the successfully produced astTree (with getAstTree()) to debug the problem.")
+          console.error(e)
         }
       }
       return solver
