@@ -1,4 +1,4 @@
-const { solve } = require("./index")
+const { solve } = require("./dist/cjs/index")
 const fs = require("fs")
 
 

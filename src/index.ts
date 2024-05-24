@@ -1,6 +1,6 @@
 import { parseAstTreeToLang, parseSATStringToAST, operators, langIndex, operatorsSelfContaining, AST } from "./parse"
 export { parseAstTreeToLang, parseSATStringToAST, operators, langIndex, operatorsSelfContaining } from "./parse"
-import Logic from "logic-solver"
+import * as Logic from "logic-solver"
 
 // const sol = new Logic.Solver()
 
