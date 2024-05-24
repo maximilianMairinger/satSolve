@@ -1,6 +1,6 @@
 {
   "name": "sat-solver",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "",
   "main": "./dist/esm/index.mjs",
   "types": "./dist/esm/index.d.ts",
