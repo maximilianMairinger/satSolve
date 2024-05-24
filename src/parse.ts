@@ -1,4 +1,4 @@
-const operators = {
+export const operators = {
   and: Symbol("and"),
   or: Symbol("or"),
   not: Symbol("not"),
@@ -9,9 +9,9 @@ const operators = {
 };
 
 // those that dont need space around them
-const operatorsSelfContaining = {}
+export const operatorsSelfContaining = {}
 
-exports.operators = operators
+
 
 operatorsSelfContaining["&"] = operators.and
 operatorsSelfContaining["&&"] = operators.and
@@ -63,22 +63,22 @@ operatorsSelfContaining["<==>"] = operators.iff
 operatorsSelfContaining["<-->"] = operators.iff
 
 const ops = {
-  hasContained(key) {
+  hasContained(key: string) {
     return key.toLowerCase() in operators
   },
-  hasUnContained(key) {
+  hasUnContained(key: string) {
     return key in operatorsSelfContaining
   },
-  getContained(key) {
-    return operators[key.toLowerCase()]
+  getContained(key: string) {
+    return operators[key.toLowerCase()] as symbol
   },
-  getUnContained(key) {
-    return operatorsSelfContaining[key]
+  getUnContained(key: string) {
+    return operatorsSelfContaining[key] as symbol
   }
 }
 
 
-const langIndex = {
+export const langIndex = {
   limbool: {
     [operators.and]: "&",
     [operators.or]: "|",
@@ -92,7 +92,6 @@ const langIndex = {
   }
 }
 
-exports.langIndex = langIndex
 
 
 const closingBracketIndex = {
@@ -102,7 +101,7 @@ const closingBracketIndex = {
 }
 
 
-function parseAstTreeToLang(astTree, lang = langIndex.limbool, pretty = true) {
+export function parseAstTreeToLang(astTree, lang = langIndex.limbool, pretty = true) {
   let str = ""
 
   for (let i = 0; i < astTree.length; i++) {
@@ -127,8 +126,9 @@ function parseAstTreeToLang(astTree, lang = langIndex.limbool, pretty = true) {
 
 // console.log(parseSATStringToAST("-(a & b) | c"))
 
+export type AST = (AST | string | symbol)[]
 
-function parseSATStringToAST (satString) {
+export function parseSATStringToAST(satString: string): AST {
   satString = satString.trim()
 
   const tree = []
@@ -230,8 +230,4 @@ function findMatchingCloseBracket(str) {
     }
   }
 }
-
-
-exports.parseSATStringToAST = parseSATStringToAST
-exports.parseAstTreeToLang = parseAstTreeToLang
 

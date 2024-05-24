@@ -1,5 +1,5 @@
-const { solve } = require("./index")
-const { parseAstTreeToLang, langIndex, operators } = require("./parse")
+import { solve } from "./index"
+import { parseAstTreeToLang, langIndex, operators } from "./parse"
 
 let query = `(a or !b) and (w or e or k) and (c or b)`
 
@@ -96,7 +96,7 @@ for (const el of currentAst) {
           biggerClauseIndent = biggerClauseIndent - smallerClauseIndent - markIndent
 
           print(mkIndent(smallerClauseIndent) + smallerMark + mkIndent(biggerClauseIndent) + biggerMark)
-          return
+          break
         }
       }
       i++

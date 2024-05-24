@@ -1,21 +1,18 @@
-const { parseAstTreeToLang, parseSATStringToAST, operators, langIndex } = require("./parse")
-const Logic = require("logic-solver")
+import { parseAstTreeToLang, parseSATStringToAST, operators, langIndex, operatorsSelfContaining, AST } from "./parse"
+export { parseAstTreeToLang, parseSATStringToAST, operators, langIndex, operatorsSelfContaining } from "./parse"
+import Logic from "logic-solver"
 
 // const sol = new Logic.Solver()
 
-exports.operators = operators
-exports.parseSATStringToAST = parseSATStringToAST
-exports.parseAstTreeToLang = parseAstTreeToLang
-exports.langIndex = langIndex
 
 const operatorToLogicSolverKeyword = {
   [operators.and]: "and",
   [operators.or]: "or",
   [operators.not]: "not",
   [operators.implies]: "implies",
-  [operators.impliesReverse]: "implies",
+  [operators.implies_reverse]: "implies",
   [operators.xor]: "xor",
-  [operators.iff]: "equiv"
+  [operators.iff]: "iff"
 }
 
 function formulateClause(token) {
@@ -73,7 +70,7 @@ function createForumla(astTree) {
       }
       else if (operatorToLogicSolverKeyword[token] !== undefined) {
         i++
-        if (token === operators.impliesReverse) forumla = Logic[operatorToLogicSolverKeyword[token]](nextClause, forumla)
+        if (token === operators.implies_reverse) forumla = Logic[operatorToLogicSolverKeyword[token]](nextClause, forumla)
         else forumla = Logic[operatorToLogicSolverKeyword[token]](forumla, nextClause)
       }
       else throw new Error("Invalid operator")
@@ -102,7 +99,7 @@ function memoizeVar(fn) {
   }
 }
 
-function solve(astString_solver) {
+export function solve(astString_solver: string | Logic.Solver) {
   let getSolver = undefined
   let errorAst = undefined 
   let error = undefined
@@ -143,7 +140,7 @@ function solve(astString_solver) {
     findOne() {
       const solver = getSolver()
       if (error) throw error
-      return solver.solve().getMap()
+      return solver.solve().getMap() as {[key: string]: boolean}
     },
     findAll() {
       const solver = getSolver()
@@ -155,19 +152,19 @@ function solve(astString_solver) {
         allSolutions.push(curSolution.getMap());
         solver.forbid(curSolution.getFormula());
       }
-      return allSolutions
+      return allSolutions as {[key: string]: boolean}[]
     },
     getSolver() {
       const solver = getSolver()
       if (error) throw error
-      return solver
+      return solver as Logic.Solver
     },
     getAstTree() {
       if (errorAst) throw errorAst
-      return astTree
+      return astTree as AST
     }
   }
 }
 
-exports.solve = solve
+
 
