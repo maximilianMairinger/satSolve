@@ -1,14 +1,20 @@
 {
   "name": "sat-solver",
-  "scripts": {
-    "build": "tsc"
-  },
-  "type": "module",
   "version": "1.2.0",
   "description": "",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "./dist/esm/index.mjs",
+  "types": "./dist/esm/index.d.ts",
+  "exports": {
+    "default": "./dist/esm/index.mjs",
+    "node": {
+      "import": "./dist/esm/index.mjs",
+      "require": "./dist/cjs/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.esm.json && tsc -p tsconfig.cjs.json && mjsify dist esm cjs"
+  },
+  "module": "./dist/esm/index.mjs",
   "keywords": [
     "sat",
     "solver",
@@ -31,6 +37,7 @@
     "logic-solver": "^2.0.1"
   },
   "devDependencies": {
+    "mjsify": "^2.0.8",
     "typescript": "^5.4.5"
   }
 }
