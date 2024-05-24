@@ -140,7 +140,7 @@ export function solve(astString_solver: string | Logic.Solver) {
     findOne() {
       const solver = getSolver()
       if (error) throw error
-      return solver.solve().getMap() as {[key: string]: boolean}
+      return solver.solve()?.getMap() as {[key: string]: boolean}
     },
     findAll() {
       const solver = getSolver()
