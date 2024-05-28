@@ -6,25 +6,25 @@ const fs = require("fs")
 const query = fs.readFileSync("query.sat").toString()
 
 
-const out = solve(query).findAll()
+const out = solve(query).findOne()
 console.log(out)
 
 
-for (const line of out) {
-  let s = []
-  for (const k in line) {
-    if (!line[k]) {
-      s.push(`!${k}`)
-    } else {
-      s.push(k)
-    }
-  }
+// for (const line of out) {
+//   let s = []
+//   for (const k in line) {
+//     if (!line[k]) {
+//       s.push(`!${k}`)
+//     } else {
+//       s.push(k)
+//     }
+//   }
 
   
-  console.log(s.join(" & "))
-}
-// console.log(out)
-console.log("count:", out.length)
+//   console.log(s.join(" & "))
+// }
+// // console.log(out)
+// console.log("count:", out.length)
 
 
 // // rule out these solutions

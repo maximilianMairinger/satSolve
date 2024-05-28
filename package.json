@@ -12,7 +12,8 @@
     }
   },
   "scripts": {
-    "build": "tsc -p tsconfig.esm.json && tsc -p tsconfig.cjs.json && mjsify dist esm cjs"
+    "build": "tsc -p tsconfig.esm.json && tsc -p tsconfig.cjs.json && mjsify dist esm cjs",
+    "dev": "concurrently \"tsc -p tsconfig.esm.json --watch\" \"tsc -p tsconfig.cjs.json --watch\""
   },
   "module": "./dist/esm/index.mjs",
   "keywords": [
@@ -34,9 +35,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "logic-solver": "^2.0.1"
+    "colorful-cli-logger": "^1.0.2",
+    "commander": "^12.1.0",
+    "logic-solver": "^2.0.1",
+    "req-package-json": "^2.1.4"
   },
   "devDependencies": {
+    "@types/node": "^20.12.12",
+    "concurrently": "^8.2.2",
     "mjsify": "^2.0.8",
     "typescript": "^5.4.5"
   }
