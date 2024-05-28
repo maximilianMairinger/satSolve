@@ -110,7 +110,7 @@ export function solve(astString_solver: string | Logic.Solver) {
       astTree = parseSATStringToAST(astString)
     }
     catch (e) {
-      errorAst = error = new Error("Error parsing the input to a astTree. This really shouldnt happen even with wrong syntax :/")
+      errorAst = error = e
     }
     
   

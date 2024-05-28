@@ -211,6 +211,7 @@ function findMatchingCloseBracket(str) {
   let cumCloseIndex = 0
   let openCount = 0
   while(true) {
+    if (str.length === 0) throw new Error("Brackets do not match")
     let nextOpenBracket = str.indexOf("(")
     let nextCloseBracket = str.indexOf(")")
 
